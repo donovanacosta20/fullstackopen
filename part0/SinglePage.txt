@@ -1,0 +1,16 @@
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/spa
+note over browser:
+    render main page
+end note
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server --> browser: TEXT/CSS
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+note over browser:
+    execute handle event to render
+    note
+end note
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server --> browser: [{"content":"wtf","date":"2022-06-16T13:19:12.042Z"}]
+note over browser:
+    get all note to server
+end note

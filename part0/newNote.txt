@@ -1,0 +1,21 @@
+browser -> server: HTTP-POST https://studies.cs.helsinki.fi/exampleapp/new_note
+server -> browser: TEXT/HTML
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/notes
+server --> browser: HTML-CODE
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server --> browser: TEXT/CSS
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server --> browser: JS
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser -> server: HTTP-GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server --> browser: [{content: 'Body Note', date: 'Date'}]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note

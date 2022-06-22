@@ -1,0 +1,6 @@
+browser -> server: HTTP-POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server -> browser: [{"content": "30","date": "2022-06-16T22:14:22.767Z"}]
+note over browser:
+    only the new note is
+    rendered
+end note
