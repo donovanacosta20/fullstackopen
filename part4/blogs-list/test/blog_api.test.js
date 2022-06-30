@@ -50,29 +50,24 @@ test('unique id blogs', async () => {
     expect(response.body[0]._id).toBeDefined()
 })
 
-describe('testeando cosas ando', () => {
+test('check add new blog to database', async () => {
+    const newBlog = {
+        title: 'test',
+        author: 'test',
+        url: 'test',
+        likes: 1
+    }
 
-    test('check add new blog to database', async () => {
-        const newBlog = {
-            title: 'test',
-            author: 'test',
-            url: 'test',
-            likes: 1
-        }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
 
-        await api
-            .post('/api/blogs')
-            .send(newBlog)
-            .expect(201)
-    })
-
-    test('return one more', async () => {
-        const response = await api.get('/api/blogs')
-        console.log('debug:', response)
-
-        expect(response.body).toHaveLength(inititalBlogs.length + 1)
-    })
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(inititalBlogs.length + 1)
 })
+
+
 
 afterAll(() => {
     mongoose.connection.close()
