@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const { deleteOne } = require('../models/blog')
 
 const api = supertest(app)
 
@@ -65,6 +66,34 @@ test('check add new blog to database', async () => {
 
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(inititalBlogs.length + 1)
+})
+
+test('check likes for default its cero', async () => {
+    const newBlog = {
+        title: 'test2',
+        author: 'test2',
+        url: 'test2'
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+
+    const response = await api.get('/api/blogs')
+    const contents = response.body.map(r => r.likes)
+
+    expect(contents).toContainEqual(0)
+
+})
+
+test('check title and url are required', async () => {
+    const newBlog = {
+        author: 'test3',
+        likes: 1010
+    }
+
+    await expect(api.post('/api/blogs').send(newBlog)).rejects.toThrow()
 })
 
 
