@@ -1,5 +1,4 @@
 const blogsRouter = require('express').Router()
-const { request } = require('express')
 const Blog = require('../models/blog')
 
 //GET ALL
