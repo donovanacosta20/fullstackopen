@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const { deleteOne } = require('../models/blog')
 
 const api = supertest(app)
 
@@ -93,10 +92,30 @@ test('check title and url are required', async () => {
         likes: 1010
     }
 
-    await expect(api.post('/api/blogs').send(newBlog)).rejects.toThrow()
+    await expect(api
+        .post('/api/blogs')
+        .send(newBlog))
 })
 
+test('check one delete by id', async () => {
+    const blog = await api.get('/api/blogs')
 
+    const content = blog.body.map(r => r.id)
+
+    const response = await api.delete(`/api/blogs/${content[0]}`)
+
+    expect(response.status).toBe(204)
+})
+
+test('check if possible update by id', async () => {
+    const blog = await api.get('/api/blogs')
+
+    const content = blog.body.map(r => r.id)
+
+    const response = await api.put(`/api/blogs/${content[0]}`, { likes: 1 })
+
+    expect(response.status).toBe(200)
+})
 
 afterAll(() => {
     mongoose.connection.close()
