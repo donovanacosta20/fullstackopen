@@ -47,7 +47,7 @@ test('a specific blog is within the returned blogs', async () => {
 test('unique id blogs', async () => {
     const response = await api.get('/api/blogs')
 
-    expect(response.body[0]._id).toBeDefined()
+    expect(response.body[0].id).toBeDefined()
 })
 
 test('check add new blog to database', async () => {
