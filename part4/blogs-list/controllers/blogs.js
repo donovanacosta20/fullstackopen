@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const blog = require('../models/blog')
 
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
@@ -42,9 +43,25 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
     const id = request.params.id
 
-    await Blog.findByIdAndRemove(id)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-    response.status(204).end()
+    const blog = await Blog.findById(id)
+
+    if (blog.user.toString() === decodedToken.id.toString()) {
+        await Blog.findByIdAndRemove(id)
+
+        response.status(204).end()
+    }
+
+    // if (blog.user.toString() === decodedToken.toString()) {
+
+    //     await Blog.findByIdAndRemove(id)
+
+    //     response.status(204).end()
+    // }
+
+
+
 })
 //UPDATE
 blogsRouter.put('/:id', async (request, response) => {
