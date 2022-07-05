@@ -6,14 +6,14 @@ const app = require('../app')
 
 const api = supertest(app)
 
-const helper = require('../utils/list_helper')
 const User = require('../models/user')
+const helper = require('../utils/list_helper')
 
 describe('when there is initially one user in db', () => {
     beforeEach(async () => {
         await User.deleteMany({})
 
-        const passwordHash = await bcrypt.hashSync('sekret', 10)
+        const passwordHash = await bcrypt.hash('sekret', 10)
         const user = new User({ username: 'root', passwordHash })
 
         await user.save()
@@ -28,10 +28,7 @@ describe('when there is initially one user in db', () => {
             password: 'nacional',
         }
 
-        await api
-            .post('/api/users')
-            .send(newUser)
-            .expect(200)
+        await api.post('/api/users').send(newUser).expect(200)
 
         const usersAtEnd = await helper.usersInDb()
         expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
@@ -40,7 +37,40 @@ describe('when there is initially one user in db', () => {
         expect(usernames).toContain(newUser.username)
 
     })
+})
 
+
+describe("different test to validation", () => {
+    test("verify if username amost 3 minlength", async () => {
+        const newUser = {
+            username: 'rt',
+            name: 'Donovan London',
+            password: 'nacional',
+        }
+
+        const response = await api.post('/api/users').send(newUser)
+
+        expect(response.body).toEqual({
+            error: 'Username is undefined or less three length'
+        })
+
+    })
+
+    test('verfy if username is unique', async () => {
+
+        const newUser = {
+            username: 'donovan',
+            name: 'oscard',
+            password: 'testeand'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(500)
+
+
+    })
 
 })
 
