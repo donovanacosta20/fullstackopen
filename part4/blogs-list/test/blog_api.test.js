@@ -4,6 +4,7 @@ const app = require('../app')
 
 const api = supertest(app)
 
+const helper = require('../utils/list_helper')
 const Blog = require('../models/blog')
 
 const inititalBlogs = [
@@ -12,12 +13,6 @@ const inititalBlogs = [
         author: "Michael Chan",
         url: "https://reactpatterns.com/",
         likes: 7,
-    },
-    {
-        title: "Go To Statement Considered Harmful",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-        likes: 5,
     }
 ]
 
@@ -51,17 +46,35 @@ test('unique id blogs', async () => {
 })
 
 test('check add new blog to database', async () => {
+
+    const user = await helper.usersInDb();
+
+    const login = {
+        username: user[1].username,
+        password: 'nacional'
+    }
+
+    const result = await api
+        .post('/api/loggin')
+        .send(login)
+        .expect(200)
+
+    const token = result.body.token
+
     const newBlog = {
         title: 'test',
         author: 'test',
         url: 'test',
-        likes: 1
+        likes: 1,
+        user: user.id
     }
 
     await api
         .post('/api/blogs')
+        .set({ 'Authorization': `Bearer ${token}` })
         .send(newBlog)
-        .expect(201)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(inititalBlogs.length + 1)
@@ -115,6 +128,24 @@ test('check if possible update by id', async () => {
     const response = await api.put(`/api/blogs/${content[0]}`, { likes: 1 })
 
     expect(response.status).toBe(200)
+})
+
+test('check if not authorization no token', async () => {
+
+    const user = await helper.usersInDb()
+
+    const newBlog = {
+        title: 'test',
+        author: 'test',
+        url: 'test',
+        likes: 1,
+        user: user[1].id
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
 })
 
 afterAll(() => {

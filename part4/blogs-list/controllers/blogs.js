@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const blog = require('../models/blog')
 
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
@@ -24,6 +23,12 @@ blogsRouter.post('/', async (request, response) => {
     }
 
     const user = await User.findById(decodedToken.id)
+
+    if(!user) {
+        return response.status(404).json({
+            error: 'user not found in database'
+        })
+    }
 
     const newBlog = new Blog({
         title: body.title,
@@ -50,18 +55,12 @@ blogsRouter.delete('/:id', async (request, response) => {
     if (blog.user.toString() === decodedToken.id.toString()) {
         await Blog.findByIdAndRemove(id)
 
-        response.status(204).end()
+       return  response.status(204).end()
     }
 
-    // if (blog.user.toString() === decodedToken.toString()) {
-
-    //     await Blog.findByIdAndRemove(id)
-
-    //     response.status(204).end()
-    // }
-
-
-
+    response.status(401).json({
+        error: 'not authorized to delete this blog'
+    })
 })
 //UPDATE
 blogsRouter.put('/:id', async (request, response) => {
