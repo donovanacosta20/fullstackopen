@@ -13,7 +13,7 @@ const Logout = ({ name, handleLogout }) => {
     return (
         <div>
             <span>{name} logged in</span>
-            <button onClick={handleLogout}>logout</button>
+            <button id='logoutButton' onClick={handleLogout}>logout</button>
         </div>
     )
 }
@@ -113,7 +113,7 @@ const App = () => {
             <div>
                 <Logout name={user.name} blogs={blogs} handleLogout={handleLogoutClick} />
                 <Notification message={message} style={style}/>
-                <Togglable buttonLabel='new Note'>
+                <Togglable buttonLabel='new Blog'>
 
                     <CreateBlogForm createNewBlog={createNewBlog}/>
                 </Togglable>

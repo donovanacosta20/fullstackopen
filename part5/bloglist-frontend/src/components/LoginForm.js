@@ -15,13 +15,13 @@ const LoginForm = ({
             <form>
                 <div>
 					username
-                    <input placeholder='input to username' onChange={handleChangeUsername} value={userName}  />
+                    <input placeholder='input to username' onChange={handleChangeUsername} value={userName}  id='username'/>
                 </div>
                 <div>
 					password
-                    <input type='password' placeholder='input to password' onChange={handleChangePassword} value={password} />
+                    <input type='password' placeholder='input to password' onChange={handleChangePassword} value={password} id='password' />
                 </div>
-                <button onClick={handleClickLogin}>Login</button>
+                <button id='loginButton' onClick={handleClickLogin}>Login</button>
             </form>
         </div>
     )

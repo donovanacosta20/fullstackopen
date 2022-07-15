@@ -45,17 +45,17 @@ const CreateBlogForm = ({ createNewBlog }) => {
                 </div>
                 <div>
 					author:
-                    <input type='text' onChange={handleChangeAuthor} value={author}/>
+                    <input id='author' type='text' onChange={handleChangeAuthor} value={author}/>
                 </div>
                 <div>
 					url:
-                    <input type='text' onChange={handleChangeUrl} value={url}/>
+                    <input id='url' type='text' onChange={handleChangeUrl} value={url}/>
                 </div>
                 <div>
 					likes:
-                    <input type='number' onChange={handleChangeLikes} value={likes}/>
+                    <input id='likes'  type='number' onChange={handleChangeLikes} value={likes}/>
                 </div>
-                <button onClick={handleCreateBlogClick}>create</button>
+                <button id='createNewBlog'  onClick={handleCreateBlogClick}>create</button>
             </form>
         </div>
     )
