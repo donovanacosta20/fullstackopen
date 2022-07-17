@@ -4,7 +4,6 @@ const reducer = (state = [], action) => {
     case 'INITIAL':
       return action.data
     case 'NEW':
-      console.log(action.anecdote)
       return state.concat(action.anecdote)
     case 'VOTE':
       const indexAnecdote = state.findIndex(anecdote => anecdote.id === action.id)

@@ -1,8 +1,12 @@
-const newAnecdote = (anecdote) => {
-    return {
-        type: 'NEW',
-        anecdote
+import anecdoteService from '../services/anecdotesService'
 
+const newAnecdote = (anecdote) => {
+    return async dispatch => {
+        const newAnecdote = await anecdoteService.createAnecdote(anecdote)
+        dispatch({
+            type: 'NEW',
+            anecdote: newAnecdote
+        })
     }
 }
 
