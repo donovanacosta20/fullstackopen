@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const Notification = () => {
   const notification = useSelector(state => state.notification)
@@ -8,8 +8,8 @@ const Notification = () => {
     borderWidth: 1
   }
 
-  if(notification === null) {
-    return  null
+  if (notification === null) {
+    return null
   }
 
   return (

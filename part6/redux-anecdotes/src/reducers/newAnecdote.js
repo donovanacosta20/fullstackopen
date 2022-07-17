@@ -1,11 +1,8 @@
-const newAnecdote = (content) => {
+const newAnecdote = (anecdote) => {
     return {
         type: 'NEW',
-        data: {
-            content: content,
-            votes: 0,
-            id: Math.random()* 19382901239090
-        }
+        anecdote
+
     }
 }
 

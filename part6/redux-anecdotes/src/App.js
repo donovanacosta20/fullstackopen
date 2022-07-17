@@ -1,16 +1,27 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { initialAnecdotes } from './reducers/anecdoteReducer'
 import newAnecdote from './reducers/newAnecdote'
 import { notificationChange } from './reducers/notificationReducer'
 import voteReducer from './reducers/voteReducer'
 
 import AnecdoteForm from './components/AnecdoteForm'
 
+import { useEffect } from 'react'
+import anecdotesService from './services/anecdotesService'
+
 import Filter from './components/Filter'
 import Notification from './components/Notification'
+
 
 const App = () => {
   const anecdotes = useSelector(state => state.anecdotes)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    anecdotesService.getAll().then(anecdote => {
+      dispatch(initialAnecdotes(anecdote))
+    })
+  }, [dispatch])
 
   const vote = (id) => {
     dispatch(voteReducer(id))
@@ -25,20 +36,20 @@ const App = () => {
 
   }
 
-  const newAnecdotes = (event) => {
+  const newAnecdotes = async (event) => {
     event.preventDefault()
 
     const content = event.target.data.value
-
-    dispatch(newAnecdote(content));
+    const newNote = await anecdotesService.createAnecdote(content)
+    dispatch(newAnecdote(newNote));
   }
 
   return (
     <div>
-      <Notification />
       <h2>Anecdotes</h2>
-      <AnecdoteForm newAnecdotes={newAnecdotes} />
+      <Notification />
       <Filter anecdotes={anecdotes} vote={vote} />
+      <AnecdoteForm newAnecdotes={newAnecdotes} />
 
     </div>
   )
