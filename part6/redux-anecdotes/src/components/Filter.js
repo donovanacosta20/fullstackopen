@@ -1,9 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { filterChange } from '../reducers/filterReducer'
+import AnecdoteList from './AnecdoteList'
 
-const Filter = () => {
-  const anecdotes = useSelector(state => state.anecdotes)
+const Filter = ({ anecdotes, vote }) => {
   const filter = useSelector(state => state.filter)
   const dispatch = useDispatch()
 
@@ -20,6 +20,7 @@ const Filter = () => {
   return (
     <div style={style}>
       filter <input onChange={handleChange} />
+      <AnecdoteList anecdotes={filterAnecdotes} vote={vote} />
     </div>
   )
 }
