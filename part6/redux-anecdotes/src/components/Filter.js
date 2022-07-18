@@ -1,29 +1,38 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
+import AnecdoteList from '../components/AnecdoteList'
 import { filterChange } from '../reducers/filterReducer'
-import AnecdoteList from './AnecdoteList'
 
-const Filter = ({ anecdotes, vote }) => {
-  const filter = useSelector(state => state.filter)
-  const dispatch = useDispatch()
+const Filter = (props) => {
 
   const handleChange = (event) => {
-    dispatch(filterChange(event.target.value))
+    props.filterChange(event.target.value)
   }
 
   const style = {
     marginBottom: 10
   }
 
-  const filterAnecdotes = anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
-
   return (
     <div style={style}>
       filter <input onChange={handleChange} />
-      <AnecdoteList anecdotes={filterAnecdotes} vote={vote} />
+      <AnecdoteList anecdotes={props.anecdotes} />
     </div>
   )
 }
 
+const mapStateToProps = (state) => {
+  const test = state.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(state.filter.toLowerCase()))
 
-export default Filter
+  return {
+    anecdotes: test,
+    filter: state.filter
+  }
+}
+
+const mapDispatchToProps = { filterChange }
+
+const FilterConnected = connect(mapStateToProps, mapDispatchToProps)(Filter)
+
+
+export default FilterConnected
