@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 
-const Blog = ({ blog, updateLikes, deleteBlog }) => {
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+
+const Blog = (props) => {
 
     const [visible, setVisible] = useState(false)
     const [moreInformation, setMoreInformation] = useState({ display: 'none' })
@@ -16,46 +19,68 @@ const Blog = ({ blog, updateLikes, deleteBlog }) => {
     const handleIsVisible = () => {
         setVisible(!visible)
 
-        if(!visible) {
+        if (!visible) {
             setMoreInformation({ display: 'block' })
-        }else {
+        } else {
             setMoreInformation({ display: 'none' })
         }
     }
 
-    const handleClickLikes = () => {
+    const getBlog = (id) => props.blogs.find(blog => blog.id === id)
 
-        updateLikes({
+    const handleClickLikes = async (event) => {
+
+        const blog = getBlog(event.target.parentNode.parentNode.id)
+
+        props.likeBlog({
             id: blog.id,
             title: blog.title,
             author: blog.author,
             url: blog.url,
-            likes: blog.likes++
+            likes: blog.likes += 1
         })
     }
 
-    const handleClickDelete = () => {
-        deleteBlog({
-            id: blog.id,
-            title: blog.title,
-            author: blog.author
-        })
+    const handleClickDelete = (event) => {
+
+        const blog = getBlog(event.target.parentNode.parentNode.id)
+
+        if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+            props.removeBlog(blog.id)
+        }
     }
 
-    return  (
-        <div style={blogStyle}>
-            <div className='blog'>
-                <span> {blog.title} {blog.author}</span>
-                <button onClick={handleIsVisible}>{visible ? 'hidden' : 'view'}</button>
+    return props.blogs.sort((a, b) => a.likes - b.likes).map(blog => {
+        return (
+            <div style={blogStyle} key={blog.id} id={blog.id}>
+                <div>
+                    <span>{blog.title} {blog.author}</span>
+                    <button onClick={handleIsVisible}>show</button>
+                </div>
+                <div style={moreInformation}>
+                    <p> url: {blog.url}</p>
+                    <p>user: {blog.user}</p>
+                    <span>likes: {blog.likes}</span>
+                    <button id='likeButton' onClick={handleClickLikes}>like</button>
+                    <button id='removeButton' onClick={handleClickDelete}>remove</button>
+                </div>
             </div>
-
-            <div style={moreInformation}>
-                <p>{blog.url}</p>
-                <span>likes: {blog.likes}</span>
-                <button id='likeButton'  onClick={handleClickLikes}>like</button>
-                <button id='removeButton'  onClick={handleClickDelete}>remove</button>
-            </div>
-        </div>
-    )
+        )
+    })
 }
-export default Blog
+
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs
+    }
+}
+
+const mapDispatchToProps = {
+    likeBlog,
+    removeBlog
+}
+
+const blogConnected = connect(mapStateToProps, mapDispatchToProps)(Blog)
+
+
+export default blogConnected

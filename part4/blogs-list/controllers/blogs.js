@@ -7,7 +7,7 @@ const User = require('../models/user')
 
 //GET ALL
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({}).populate('user')
+    const blogs = await Blog.find({}).populate()
 
     response.json(blogs)
 
@@ -24,7 +24,7 @@ blogsRouter.post('/', async (request, response) => {
 
     const user = await User.findById(decodedToken.id)
 
-    if(!user) {
+    if (!user) {
         return response.status(404).json({
             error: 'user not found in database'
         })
@@ -55,7 +55,7 @@ blogsRouter.delete('/:id', async (request, response) => {
     if (blog.user.toString() === decodedToken.id.toString()) {
         await Blog.findByIdAndRemove(id)
 
-       return  response.status(204).end()
+        return response.status(204).end()
     }
 
     response.status(401).json({
