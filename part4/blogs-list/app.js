@@ -24,7 +24,7 @@ app.use(express.json())
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/loggin', logginRouter)
-app.use('/api/blogs/:id', commentsRouter)
+app.use('/api/blogs/', commentsRouter)
 
 if (process.env.NODE_ENV === 'test') {
     const testingRouter = require('./controllers/testing')

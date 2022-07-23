@@ -9,6 +9,7 @@ import usersService from './services/users'
 import Blog from './components/Blog'
 import CreateBlogForm from './components/CreateBlogForm'
 import LoginForm from './components/LoginForm'
+import Menu from './components/Menu'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
@@ -17,14 +18,7 @@ import { initialBlog, newBlog } from './reducers/blogReducer'
 import { logInChange } from './reducers/logInReducer'
 import { notificationChange } from './reducers/notificationReducer'
 
-const Logout = ({ name, handleLogout }) => {
-    return (
-        <div>
-            <p>{name} logged in</p>
-            <button id='logoutButton' onClick={handleLogout}>logout</button>
-        </div>
-    )
-}
+
 
 const App = () => {
 
@@ -103,9 +97,9 @@ const App = () => {
 
             <div>
                 <h1>Blogs</h1>
-                <Logout name={userLog.name} handleLogout={handleLogoutClick} />
 
                 <Router>
+                    <Menu name={userLog.name} handleLogout={handleLogoutClick} />
                     <Routes>
                         <Route path='/users' element={<Users users={users} />} />
                         <Route path='/users/:id' element={<Users users={users} />} />

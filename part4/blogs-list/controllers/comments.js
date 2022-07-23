@@ -2,18 +2,18 @@ const commentRouter = require('express').Router()
 
 const commentModel = require('../models/comments')
 
-commentRouter.get('/', async (request, response) => {
-    const comment = await commentModel.find({})
+commentRouter.get('/:id', async (request, response) => {
+    const comments = await commentModel.find({ blog: request.params.id })
 
-    response.json(comment)
+    response.json(comments)
 })
 
-commentRouter.post('/', async (request, response) => {
+commentRouter.post('/:id', async (request, response) => {
     const body = request.body
 
     const newCommentObject = new commentModel({
         comment: body.comment,
-        blog: request.params.id
+        blog: body.blog
     })
 
     const commentSaved = await newCommentObject.save()

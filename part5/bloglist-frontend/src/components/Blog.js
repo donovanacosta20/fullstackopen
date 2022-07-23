@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 
 import { likeBlog } from '../reducers/blogReducer'
+import Comments from './Comments'
 
 
 const Blog = (props) => {
@@ -32,6 +33,8 @@ const Blog = (props) => {
     const blog = props.blogs.find(blog => blog.id === id)
     const user = props.users.find(user => user.id === blog.user)
 
+    console.log(blog)
+
     const handleLike = () => {
         props.likeBlog({ ...blog, likes: blog.likes += 1 })
     }
@@ -46,6 +49,8 @@ const Blog = (props) => {
             </div>
 
             <p>added by {user.name}</p>
+
+            <Comments blog={blog} />
         </div>
     )
 }

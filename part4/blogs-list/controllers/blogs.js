@@ -7,6 +7,7 @@ const User = require('../models/user')
 
 //GET ALL
 blogsRouter.get('/', async (request, response) => {
+
     const blogs = await Blog.find({})
 
     response.json(blogs)
