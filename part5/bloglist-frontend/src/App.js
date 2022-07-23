@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
+import usersService from './services/users'
 
 import Blog from './components/Blog'
 import CreateBlogForm from './components/CreateBlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 
 import { initialBlog, newBlog } from './reducers/blogReducer'
 import { logInChange } from './reducers/logInReducer'
@@ -17,7 +20,7 @@ import { notificationChange } from './reducers/notificationReducer'
 const Logout = ({ name, handleLogout }) => {
     return (
         <div>
-            <span>{name} logged in</span>
+            <p>{name} logged in</p>
             <button id='logoutButton' onClick={handleLogout}>logout</button>
         </div>
     )
@@ -29,6 +32,8 @@ const App = () => {
 
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
+
+    const [users, setUsers] = useState([])
 
     const [style, setStyle] = useState({
         padding: 10,
@@ -43,6 +48,10 @@ const App = () => {
 
     useEffect(() => {
         dispatch(initialBlog())
+
+        usersService.getAll().then(response => {
+            setUsers(response)
+        })
     }, [dispatch])
 
     const createNewBlog = async (blog) => {
@@ -93,12 +102,26 @@ const App = () => {
         return (
 
             <div>
+                <h1>Blogs</h1>
                 <Logout name={userLog.name} handleLogout={handleLogoutClick} />
-                <Notification style={style} />
-                <Togglable buttonLabel='new Blog'>
-                    <CreateBlogForm createNewBlog={createNewBlog} />
-                </Togglable>
-                <Blog />
+
+                <Router>
+                    <Routes>
+                        <Route path='/users' element={<Users users={users} />} />
+                        <Route path='/users/:id' element={<Users users={users} />} />
+                        <Route path='/blogs/:id' element={<Blog users={users} />} />
+                        <Route path='/' element={
+                            <div>
+                                <Notification style={style} />
+                                <Togglable buttonLabel='new Blog'>
+                                    <CreateBlogForm createNewBlog={createNewBlog} />
+                                </Togglable>
+
+                                <Blog />
+                            </div>
+                        } />
+                    </Routes>
+                </Router>
             </div>
 
         )

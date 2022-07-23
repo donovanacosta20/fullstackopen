@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
+import { Link, useParams } from 'react-router-dom'
 
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog } from '../reducers/blogReducer'
+
 
 const Blog = (props) => {
-
-    const [visible, setVisible] = useState(false)
-    const [moreInformation, setMoreInformation] = useState({ display: 'none' })
 
     const blogStyle = {
         paddingTop: 10,
@@ -16,57 +15,42 @@ const Blog = (props) => {
         marginBottom: 5
     }
 
-    const handleIsVisible = () => {
-        setVisible(!visible)
+    const id = useParams().id
 
-        if (!visible) {
-            setMoreInformation({ display: 'block' })
-        } else {
-            setMoreInformation({ display: 'none' })
-        }
-    }
-
-    const getBlog = (id) => props.blogs.find(blog => blog.id === id)
-
-    const handleClickLikes = async (event) => {
-
-        const blog = getBlog(event.target.parentNode.parentNode.id)
-
-        props.likeBlog({
-            id: blog.id,
-            title: blog.title,
-            author: blog.author,
-            url: blog.url,
-            likes: blog.likes += 1
+    if (!id) {
+        return props.blogs.sort((a, b) => a.likes - b.likes).map(blog => {
+            return (
+                <div style={blogStyle} key={blog.id} id={blog.id}>
+                    <div>
+                        <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+                    </div>
+                </div>
+            )
         })
     }
 
-    const handleClickDelete = (event) => {
+    const blog = props.blogs.find(blog => blog.id === id)
+    const user = props.users.find(user => user.id === blog.user)
 
-        const blog = getBlog(event.target.parentNode.parentNode.id)
+    const handleLike = () => {
 
-        if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-            props.removeBlog(blog.id)
-        }
+        props.likeBlog({ ...blog, likes: blog.likes += 1 })
     }
 
-    return props.blogs.sort((a, b) => a.likes - b.likes).map(blog => {
-        return (
-            <div style={blogStyle} key={blog.id} id={blog.id}>
-                <div>
-                    <span>{blog.title} {blog.author}</span>
-                    <button onClick={handleIsVisible}>show</button>
-                </div>
-                <div style={moreInformation}>
-                    <p> url: {blog.url}</p>
-                    <p>user: {blog.user}</p>
-                    <span>likes: {blog.likes}</span>
-                    <button id='likeButton' onClick={handleClickLikes}>like</button>
-                    <button id='removeButton' onClick={handleClickDelete}>remove</button>
-                </div>
+    return (
+        <div>
+            <h2>{blog.title}</h2>
+            <a href={blog.url} target='_blank' rel="noreferrer">{blog.url}</a>
+            <div>
+                <span>{blog.likes}</span>
+                <button onClick={handleLike}>like</button>
             </div>
-        )
-    })
+
+            <p>added by {user.name}</p>
+        </div>
+    )
+
+
 }
 
 const mapStateToProps = (state) => {
@@ -75,12 +59,11 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = {
-    likeBlog,
-    removeBlog
+const mapDispatchToState = {
+    likeBlog
 }
 
-const blogConnected = connect(mapStateToProps, mapDispatchToProps)(Blog)
+const blogConnected = connect(mapStateToProps, mapDispatchToState)(Blog)
 
 
 export default blogConnected
