@@ -10,9 +10,10 @@ const middleware = require('./utils/middlware')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const logginRouter = require('./controllers/loggin')
-
+const commentsRouter = require('./controllers/comments')
 
 const mongoose = require('mongoose')
+
 
 logger.info('Connecting to MONGODB', process.env.MONGODB_URI)
 mongoose.connect(config.MONGODB_URI)
@@ -23,9 +24,10 @@ app.use(express.json())
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/loggin', logginRouter)
+app.use('/api/blogs/:id', commentsRouter)
 
-if (process.env.NODE_ENV === 'test') {  
-    const testingRouter = require('./controllers/testing')  
+if (process.env.NODE_ENV === 'test') {
+    const testingRouter = require('./controllers/testing')
     app.use('/api/testing', testingRouter)
 }
 

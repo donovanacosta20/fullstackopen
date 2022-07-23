@@ -7,7 +7,7 @@ const User = require('../models/user')
 
 //GET ALL
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({}).populate()
+    const blogs = await Blog.find({})
 
     response.json(blogs)
 
@@ -39,8 +39,6 @@ blogsRouter.post('/', async (request, response) => {
     })
 
     const savedBlog = await newBlog.save()
-    user.blog = user.blog.concat(savedBlog._id)
-    await user.save()
 
     response.json(savedBlog)
 })

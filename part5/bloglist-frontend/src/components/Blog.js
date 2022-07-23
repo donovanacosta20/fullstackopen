@@ -33,7 +33,6 @@ const Blog = (props) => {
     const user = props.users.find(user => user.id === blog.user)
 
     const handleLike = () => {
-
         props.likeBlog({ ...blog, likes: blog.likes += 1 })
     }
 
@@ -49,8 +48,6 @@ const Blog = (props) => {
             <p>added by {user.name}</p>
         </div>
     )
-
-
 }
 
 const mapStateToProps = (state) => {
