@@ -15,8 +15,15 @@ const Blog = (props) => {
 
     })
 
+<<<<<<< HEAD
     const handleLike = () => {
         props.likeBlog({ ...blogInfo, likes: blogInfo.likes += 1 })
+=======
+    console.log(blog)
+
+    const handleLike = () => {
+        props.likeBlog({ ...blog, likes: blog.likes += 1 })
+>>>>>>> 360932f82c17bd5f7b792094a269d8725a6465b8
     }
 
     if (blogInfo) {
@@ -37,6 +44,7 @@ const Blog = (props) => {
         )
     }
 
+<<<<<<< HEAD
     return props.blogs.sort((a, b) => a.likes - b.likes).map(blog => {
         return (
             <div key={blog.id} id={blog.id}>
@@ -46,6 +54,13 @@ const Blog = (props) => {
             </div>
         )
     })
+=======
+            <p>added by {user.name}</p>
+
+            <Comments blog={blog} />
+        </div>
+    )
+>>>>>>> 360932f82c17bd5f7b792094a269d8725a6465b8
 }
 
 

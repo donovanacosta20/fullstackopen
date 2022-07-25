@@ -8,6 +8,7 @@ import loginService from './services/login'
 import Blog from './components/Blog'
 import CreateBlogForm from './components/CreateBlogForm'
 import LoginForm from './components/LoginForm'
+import Menu from './components/Menu'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
@@ -18,6 +19,11 @@ import { initialBlog, newBlog } from './reducers/blogReducer'
 import { logInChange } from './reducers/logInReducer'
 import { notificationChange } from './reducers/notificationReducer'
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 360932f82c17bd5f7b792094a269d8725a6465b8
 const App = () => {
 
     let userLog = useSelector(state => state.logIn)
@@ -92,7 +98,10 @@ const App = () => {
 
                 <Router>
                     <Menu name={userLog.name} handleLogout={handleLogoutClick} />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 360932f82c17bd5f7b792094a269d8725a6465b8
                     <Routes>
                         <Route path='/users' element={<Users />} />
                         <Route path='/users/:id' element={<UserInfo />} />
