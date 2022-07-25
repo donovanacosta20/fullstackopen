@@ -1,17 +1,18 @@
 const jwt = require('jsonwebtoken')
 
 const blogsRouter = require('express').Router()
-const Blog = require('../models/blog')
 
+const Blog = require('../models/blog')
 const User = require('../models/user')
 
 //GET ALL
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({}).populate()
+    const blogs = await Blog.find({}).populate('user')
 
     response.json(blogs)
 
 })
+
 //POST
 blogsRouter.post('/', async (request, response) => {
     const body = request.body
@@ -44,6 +45,7 @@ blogsRouter.post('/', async (request, response) => {
 
     response.json(savedBlog)
 })
+
 //DELETE
 blogsRouter.delete('/:id', async (request, response) => {
     const id = request.params.id
@@ -62,6 +64,7 @@ blogsRouter.delete('/:id', async (request, response) => {
         error: 'not authorized to delete this blog'
     })
 })
+
 //UPDATE
 blogsRouter.put('/:id', async (request, response) => {
     const id = request.params.id

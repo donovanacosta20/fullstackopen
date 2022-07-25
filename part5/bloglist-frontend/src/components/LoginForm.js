@@ -1,5 +1,5 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
 const LoginForm = ({
     userName,
@@ -7,23 +7,24 @@ const LoginForm = ({
     handleChangeUsername,
     handleChangePassword,
     handleClickLogin }) => {
+
     return (
 
-        <div>
+        <div className='loginForm'>
             <h1>Login</h1>
 
-            <form>
-                <div>
-					username
-                    <input placeholder='input to username' onChange={handleChangeUsername} value={userName}  id='username'/>
+            <form className='loginForm__form'>
+                <div className='loginForm__input'>
+                    username
+                    <input placeholder='input to username' onChange={handleChangeUsername} value={userName} id='username' />
                 </div>
-                <div>
-					password
+                <div className='loginForm__input'>
+                    password
                     <input type='password' placeholder='input to password' onChange={handleChangePassword} value={password} id='password' />
                 </div>
-                <button id='loginButton' onClick={handleClickLogin}>Login</button>
-            </form>
-        </div>
+                <button className='loginForm__button' id='loginButton' onClick={handleClickLogin}>Login</button>
+            </form >
+        </div >
     )
 
 }

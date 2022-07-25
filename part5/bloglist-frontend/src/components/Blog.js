@@ -1,57 +1,53 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 
 import { likeBlog } from '../reducers/blogReducer'
+import Comments from './Comments'
 
 
 const Blog = (props) => {
 
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5
-    }
+    let id = useParams().id
+    const blogInfo = props.blogs.find(blog => blog.id === id)
 
-    const id = useParams().id
+    useEffect(() => {
 
-    if (!id) {
-        return props.blogs.sort((a, b) => a.likes - b.likes).map(blog => {
-            return (
-                <div style={blogStyle} key={blog.id} id={blog.id}>
-                    <div>
-                        <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-                    </div>
-                </div>
-            )
-        })
-    }
-
-    const blog = props.blogs.find(blog => blog.id === id)
-    const user = props.users.find(user => user.id === blog.user)
+    })
 
     const handleLike = () => {
-
-        props.likeBlog({ ...blog, likes: blog.likes += 1 })
+        props.likeBlog({ ...blogInfo, likes: blogInfo.likes += 1 })
     }
 
-    return (
-        <div>
-            <h2>{blog.title}</h2>
-            <a href={blog.url} target='_blank' rel="noreferrer">{blog.url}</a>
+    if (blogInfo) {
+
+        return (
             <div>
-                <span>{blog.likes}</span>
-                <button onClick={handleLike}>like</button>
+                <h2>{blogInfo.title}</h2>
+                <a href={blogInfo.url} target='_blank' rel="noreferrer">{blogInfo.url}</a>
+                <div>
+                    <span>{blogInfo.likes}</span>
+                    <button onClick={handleLike}>like</button>
+                </div>
+
+                <p>added by {blogInfo.user.name}</p>
+
+                <Comments idBlog={id} />
             </div>
+        )
+    }
 
-            <p>added by {user.name}</p>
-        </div>
-    )
-
-
+    return props.blogs.sort((a, b) => a.likes - b.likes).map(blog => {
+        return (
+            <div key={blog.id} id={blog.id}>
+                <div>
+                    <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+                </div>
+            </div>
+        )
+    })
 }
+
 
 const mapStateToProps = (state) => {
     return {

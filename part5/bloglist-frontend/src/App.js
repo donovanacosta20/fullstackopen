@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
-import usersService from './services/users'
 
 import Blog from './components/Blog'
 import CreateBlogForm from './components/CreateBlogForm'
@@ -13,18 +12,11 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 
+import Menu from './components/Menu'
+import UserInfo from './components/UserInfo'
 import { initialBlog, newBlog } from './reducers/blogReducer'
 import { logInChange } from './reducers/logInReducer'
 import { notificationChange } from './reducers/notificationReducer'
-
-const Logout = ({ name, handleLogout }) => {
-    return (
-        <div>
-            <p>{name} logged in</p>
-            <button id='logoutButton' onClick={handleLogout}>logout</button>
-        </div>
-    )
-}
 
 const App = () => {
 
@@ -32,8 +24,6 @@ const App = () => {
 
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
-
-    const [users, setUsers] = useState([])
 
     const [style, setStyle] = useState({
         padding: 10,
@@ -48,10 +38,6 @@ const App = () => {
 
     useEffect(() => {
         dispatch(initialBlog())
-
-        usersService.getAll().then(response => {
-            setUsers(response)
-        })
     }, [dispatch])
 
     const createNewBlog = async (blog) => {
@@ -103,13 +89,14 @@ const App = () => {
 
             <div>
                 <h1>Blogs</h1>
-                <Logout name={userLog.name} handleLogout={handleLogoutClick} />
 
                 <Router>
+                    <Menu name={userLog.name} handleLogout={handleLogoutClick} />
+
                     <Routes>
-                        <Route path='/users' element={<Users users={users} />} />
-                        <Route path='/users/:id' element={<Users users={users} />} />
-                        <Route path='/blogs/:id' element={<Blog users={users} />} />
+                        <Route path='/users' element={<Users />} />
+                        <Route path='/users/:id' element={<UserInfo />} />
+                        <Route path='/blogs/:id' element={<Blog />} />
                         <Route path='/' element={
                             <div>
                                 <Notification style={style} />

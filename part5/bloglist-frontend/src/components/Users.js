@@ -1,11 +1,24 @@
-import { Link, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
-const Users = ({ users }) => {
+import serviceUsers from '../services/users'
 
-    const id = useParams().id
+const Users = () => {
 
-    if (!id) {
-        return (
+    const [users, setUsers] = useState()
+
+    useEffect(() => {
+        serviceUsers.getAll().then(response => {
+            setUsers(response)
+        })
+    }, [])
+
+    if (!users) {
+        return null
+    }
+
+    return (
+        <div>
             <table>
                 <thead>
                     <tr>
@@ -19,20 +32,9 @@ const Users = ({ users }) => {
                             <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
                             <td>{user.blog.length}</td>
                         </tr>
-                    </tbody>)}
+                    </tbody>
+                )}
             </table>
-        )
-    }
-
-    const user = users.find(user => user.id === id)
-
-    return (
-        <div>
-            <h2>{user.name}</h2>
-            <h3>added blogs</h3>
-            <ul>
-                {user.blog.map(item => <li key={item.id}>{item.title}</li>)}
-            </ul>
         </div>
     )
 }

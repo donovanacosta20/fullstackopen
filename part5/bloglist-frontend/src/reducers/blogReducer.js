@@ -10,6 +10,8 @@ const blogReducer = (state = [], action) => {
             return state.filter(blog => blog.id !== action.id)
         case 'LIKE':
             return [...state]
+        case 'GET_ONE':
+            return action.blog
         default:
             return state
     }
@@ -30,6 +32,15 @@ export const newBlog = (blog) => {
         dispatch({
             type: 'NEW',
             newBlog: await serviceBlog.create(blog)
+        })
+    }
+}
+
+export const getOneBlog = (id) => {
+    return async dispatch => {
+        dispatch({
+            type: 'GET_ONE',
+            blog: serviceBlog.getOne(id)
         })
     }
 }

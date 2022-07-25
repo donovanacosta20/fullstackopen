@@ -11,6 +11,12 @@ const getAll = async () => {
     return response.data
 }
 
+const getOne = async (id) => {
+    const response = await axios.get(baseUrl + `/${id}`)
+
+    return response.data
+}
+
 const create = async (blog) => {
 
     const config = {
@@ -35,4 +41,4 @@ const deleteBlog = async (id) => {
     return response.data
 }
 // eslint-disable-next-line
-export default { getAll, create, updateBlog, deleteBlog, setToken }
+export default { getAll, create, updateBlog, deleteBlog, setToken, getOne }
